@@ -6,85 +6,46 @@
     <title>AeroFocus - Pomodoro de Vuelo</title>
     <link rel="icon" type="image/png" href="AeroFocusIcono.ico" />
     <script src="https://cdn.tailwindcss.com"></script>
-    <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap"
-      rel="stylesheet"
-    />
-    <link rel="stylesheet" href="style.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="style.css?v=1.2" />
     <script defer src="script.js"></script>
   </head>
   <body class="min-h-screen bg-slate-50 flex flex-col font-['Inter']">
     <nav class="p-4 shadow-lg text-white">
       <div class="max-w-full mx-auto flex justify-between items-center px-6">
         <div>
-          <h1
-            class="font-black text-2xl tracking-tighter uppercase italic leading-none"
-          >
+          <h1 class="font-black text-2xl tracking-tighter uppercase italic leading-none">
             AERO<span class="text-[var(--light-green)]">FOCUS</span>
           </h1>
-          <span class="text-[10px] tracking-[0.3em] text-slate-300 uppercase italic"
-            >Ignacio Ezequiel Sanchez Edition</span
-          >
+          <span class="text-[10px] tracking-[0.3em] text-slate-300 uppercase italic">Ignacio Ezequiel Sanchez Edition</span>
         </div>
-        <div
-          class="millas-badge px-6 py-2 rounded-full font-bold border border-[var(--light-green)] bg-white/10"
-        >
+        <div class="millas-badge px-6 py-2 rounded-full font-bold border border-[var(--light-green)] bg-white/10">
           Millas recorridas: <span id="puntos-val">0</span>
         </div>
       </div>
     </nav>
 
     <header class="hero-search p-8 text-white">
-      <div
-        class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-6 items-end"
-      >
+      <div class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-6 items-end">
         <div>
-          <label
-            class="text-[10px] font-bold uppercase mb-2 block opacity-80"
-            for="select-paquete"
-            >Paquete de Viaje</label
-          >
-          <select
-            id="select-paquete"
-            class="custom-select w-full p-3 rounded font-bold text-slate-800 outline-none"
-            aria-label="Paquete de viaje"
-          >
+          <label class="text-[10px] font-bold uppercase mb-2 block opacity-80" for="select-paquete">Paquete de Viaje</label>
+          <select id="select-paquete" class="custom-select w-full p-3 rounded font-bold text-slate-800 outline-none">
             <option value="" selected>Selecciona paquete</option>
           </select>
         </div>
         <div>
-          <label
-            class="text-[10px] font-bold uppercase mb-2 block opacity-80"
-            for="select-origen"
-            >Ciudad de Origen</label
-          >
-          <select
-            id="select-origen"
-            class="custom-select w-full p-3 rounded font-bold text-slate-800 outline-none"
-            aria-label="Ciudad de origen"
-          >
+          <label class="text-[10px] font-bold uppercase mb-2 block opacity-80" for="select-origen">Ciudad de Origen</label>
+          <select id="select-origen" class="custom-select w-full p-3 rounded font-bold text-slate-800 outline-none">
             <option value="" selected disabled>Selecciona origen</option>
           </select>
         </div>
         <div>
-          <label
-            class="text-[10px] font-bold uppercase mb-2 block opacity-80"
-            for="select-destino"
-            >Ciudad de Destino</label
-          >
-          <select
-            id="select-destino"
-            class="custom-select w-full p-3 rounded font-bold text-slate-800 outline-none"
-            aria-label="Ciudad de destino"
-          >
+          <label class="text-[10px] font-bold uppercase mb-2 block opacity-80" for="select-destino">Ciudad de Destino</label>
+          <select id="select-destino" class="custom-select w-full p-3 rounded font-bold text-slate-800 outline-none">
             <option value="" selected disabled>Selecciona destino</option>
           </select>
         </div>
-        <button
-          id="btn-reservar"
-          type="button"
-          class="btn-secondary w-full p-3 rounded font-black uppercase shadow-lg active:scale-95 transition-all"
-        >
+        <button id="btn-reservar" type="button" class="btn-secondary w-full p-3 rounded font-black uppercase shadow-lg active:scale-95 transition-all">
           Reservar Plan de Vuelo
         </button>
       </div>
@@ -92,71 +53,44 @@
 
     <main class="flex-1 flex flex-col w-full p-6 gap-6">
       <section class="grid grid-cols-1 md:grid-cols-[320px_1fr] gap-6">
-      <aside class="w-full md:w-80">
-        <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
-          <div
-            class="bg-slate-800 text-white p-4 font-bold uppercase text-[10px] flex justify-between"
-          >
-            <span>Manifiesto de Vuelo</span> <span id="flight-number">--</span>
+        <aside class="w-full md:w-80">
+          <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+            <div class="bg-slate-800 text-white p-4 font-bold uppercase text-[10px] flex justify-between">
+              <span>Manifiesto de Vuelo</span> <span id="flight-number">--</span>
+            </div>
+            <ul id="ruta-lista" class="p-4 space-y-3 min-h-[150px]">
+              <li class="text-slate-400 text-xs italic text-center py-8">No hay ruta activa</li>
+            </ul>
           </div>
-          <ul id="ruta-lista" class="p-4 space-y-3 min-h-[150px]">
-            <li class="text-slate-400 text-xs italic text-center py-8">
-              No hay ruta activa
-            </li>
-          </ul>
-        </div>
-      </aside>
+        </aside>
 
-      <section
-        class="flex-1 boarding-card rounded-3xl p-12 flex flex-col items-center justify-center relative"
-      >
-        <div
-          id="estado-vuelo"
-          class="uppercase font-bold text-[10px] tracking-[0.4em] text-slate-400 mb-6 text-center"
-        >
-          Esperando Plan de Vuelo
-        </div>
-        <div id="reloj" class="text-8xl md:text-[11rem] font-black leading-none mb-10 tabular-nums">
-          45:00
-        </div>
+        <section class="flex-1 boarding-card rounded-3xl p-12 flex flex-col items-center justify-center relative">
+          <div id="estado-vuelo" class="uppercase font-bold text-[10px] tracking-[0.4em] text-slate-400 mb-6 text-center">Esperando Plan de Vuelo</div>
+          <div id="reloj" class="text-8xl md:text-[11rem] font-black leading-none mb-10 tabular-nums">45:00</div>
 
-        <div class="flex flex-wrap gap-4 justify-center z-10">
-          <button
-            id="btn-start"
-            type="button"
-            class="btn-primary px-12 py-4 rounded-2xl font-black text-lg shadow-xl hover:brightness-110 active:scale-95 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            DESPEGAR
-          </button>
-          <button
-            id="btn-pause"
-            type="button"
-            class="bg-slate-100 px-10 py-4 rounded-2xl font-bold text-slate-500 hover:bg-slate-200 disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            PAUSA
-          </button>
-          <button
-            id="btn-reset"
-            type="button"
-            class="px-6 py-4 text-red-400 font-bold uppercase text-[10px] tracking-widest hover:text-red-600"
-          >
-            Abortar Misión
-          </button>
-        </div>
+          <div class="flex flex-wrap gap-4 justify-center z-10">
+            <button id="btn-start" type="button" class="btn-primary px-12 py-4 rounded-2xl font-black text-lg shadow-xl hover:brightness-110 active:scale-95 transition-all">
+              DESPEGAR
+            </button>
+            <button id="btn-pause" type="button" class="bg-slate-100 px-10 py-4 rounded-2xl font-bold text-slate-500 hover:bg-slate-200">
+              PAUSA
+            </button>
+            <button id="btn-reset" type="button" class="px-6 py-4 text-red-400 font-bold uppercase text-[10px] tracking-widest hover:text-red-600">
+              Abortar Misión
+            </button>
+          </div>
 
-        <div class="w-full max-w-xl mt-12 px-4">
-          <div class="flex justify-between text-[10px] font-bold text-slate-400 mb-2 uppercase">
-            Progreso del Trayecto
+          <div class="w-full max-w-xl mt-12 px-4">
+            <div class="flex justify-between text-[10px] font-bold text-slate-400 mb-2 uppercase">Progreso del Trayecto</div>
+            <div class="w-full bg-slate-100 h-2 rounded-full overflow-hidden border border-slate-200">
+              <div id="barra-progreso" class="progress-fill h-full w-0 transition-all duration-1000"></div>
+            </div>
+            <div class="mt-4 flex flex-wrap gap-3 text-[11px] font-bold text-slate-400 uppercase">
+              <span id="distance-info">Distancia: -- km</span>
+              <span id="blocks-info">Bloques estimados: --</span>
+            </div>
           </div>
-          <div class="w-full bg-slate-100 h-2 rounded-full overflow-hidden border border-slate-200">
-            <div id="barra-progreso" class="progress-fill h-full w-0 transition-all duration-1000"></div>
-          </div>
-          <div class="mt-4 flex flex-wrap gap-3 text-[11px] font-bold text-slate-400 uppercase">
-            <span id="distance-info">Distancia: -- km</span>
-            <span id="blocks-info">Bloques estimados: --</span>
-          </div>
-        </div>
-      </section>
+        </section>
       </section>
 
       <section class="grid grid-cols-1 xl:grid-cols-[1.2fr_1fr] gap-6">
@@ -170,30 +104,13 @@
             <div class="bg-slate-50 rounded-2xl p-4 border border-slate-200">
               <h3 class="text-xs font-bold uppercase text-slate-500 mb-3">Configuración de Misión</h3>
               <div class="grid grid-cols-2 gap-4 text-xs font-bold text-slate-600">
-                <label class="flex flex-col gap-2">
-                  Focus (min)
-                  <input id="input-focus" type="number" min="15" max="90" step="5" class="rounded-lg border border-slate-200 px-3 py-2 font-bold text-slate-700" />
-                </label>
-                <label class="flex flex-col gap-2">
-                  Descanso (min)
-                  <input id="input-break" type="number" min="5" max="30" step="1" class="rounded-lg border border-slate-200 px-3 py-2 font-bold text-slate-700" />
-                </label>
-                <label class="flex flex-col gap-2">
-                  Escalas
-                  <input id="input-legs" type="number" min="0" max="3" step="1" class="rounded-lg border border-slate-200 px-3 py-2 font-bold text-slate-700" />
-                </label>
-                <label class="flex flex-col gap-2">
-                  Km por bloque
-                  <input id="input-distance" type="number" min="200" max="5000" step="100" class="rounded-lg border border-slate-200 px-3 py-2 font-bold text-slate-700" />
-                </label>
-                <label class="flex items-center gap-2 text-slate-600">
-                  <input id="toggle-sound" type="checkbox" class="h-4 w-4 accent-[var(--emerald)]" />
-                  Sonido de cabina
-                </label>
+                <label class="flex flex-col gap-2">Focus (min) <input id="input-focus" type="number" min="15" max="90" step="5" class="rounded-lg border border-slate-200 px-3 py-2" /></label>
+                <label class="flex flex-col gap-2">Descanso (min) <input id="input-break" type="number" min="5" max="30" step="1" class="rounded-lg border border-slate-200 px-3 py-2" /></label>
+                <label class="flex flex-col gap-2">Escalas <input id="input-legs" type="number" min="0" max="3" step="1" class="rounded-lg border border-slate-200 px-3 py-2" /></label>
+                <label class="flex flex-col gap-2">Km por bloque <input id="input-distance" type="number" min="200" max="5000" step="100" class="rounded-lg border border-slate-200 px-3 py-2" /></label>
+                <label class="flex items-center gap-2 text-slate-600"><input id="toggle-sound" type="checkbox" class="h-4 w-4 accent-[var(--emerald)]" /> Sonido de cabina</label>
               </div>
-              <button id="btn-apply-config" type="button" class="mt-4 w-full btn-primary py-3 rounded-xl font-black uppercase text-xs">
-                Guardar Configuración
-              </button>
+              <button id="btn-apply-config" type="button" class="mt-4 w-full btn-primary py-3 rounded-xl font-black uppercase text-xs">Guardar Configuración</button>
             </div>
 
             <div class="bg-slate-50 rounded-2xl p-4 border border-slate-200">
@@ -202,13 +119,12 @@
                 <span>Cambia modo noche / modo día</span>
                 <button id="toggle-theme" type="button" class="px-4 py-2 rounded-full border border-slate-300">Alternar</button>
               </div>
-              <div class="mt-4 text-[11px] text-slate-400 font-bold uppercase">Se guarda en tu navegador.</div>
             </div>
           </div>
 
           <div class="bg-slate-50 rounded-2xl p-4 border border-slate-200">
             <h3 class="text-xs font-bold uppercase text-slate-500 mb-3">Mapa de Ruta</h3>
-            <svg id="flight-map" class="w-full h-40" viewBox="0 0 600 160" role="img" aria-label="Mapa de ruta">
+            <svg id="flight-map" class="w-full h-40" viewBox="0 0 600 160">
               <path d="M30 120 C150 10 450 10 570 120" stroke="#cbd5f5" stroke-width="4" fill="none" />
               <circle class="map-stop" data-stop="0" cx="30" cy="120" r="9" fill="#22577a" />
               <circle class="map-stop" data-stop="1" cx="165" cy="55" r="9" fill="#94a3b8" />
@@ -233,46 +149,29 @@
       </section>
     </main>
 
-<footer class="app-footer">
-    <div class="footer-content">
+    <footer class="app-footer">
+      <div class="footer-content">
         <p>AeroFocus v1.0.0 | Proyecto by Nachoesnz</p>
         <a href="https://github.com/Nachoesnz/AeroFocus/releases/download/v1.0.0/aerofocus_0.1.0_x64-setup.exe" class="footer-download-btn">
-            <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                <path d="M8 0a.5.5 0 0 1 .5.5v11.793l3.146-3.147a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 1 1 .708-.708L7.5 12.293V.5A.5.5 0 0 1 8 0z"/>
-            </svg>
-            Instalar para Windows
+          <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+            <path d="M8 0a.5.5 0 0 1 .5.5v11.793l3.146-3.147a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 1 1 .708-.708L7.5 12.293V.5A.5.5 0 0 1 8 0z" />
+          </svg>
+          Instalar para Windows
         </a>
         <span class="security-tip">Nota: Editor desconocido (SmartScreen) > Ejecutar de todas formas.</span>
-    </div>
-</footer>
+      </div>
+    </footer>
 
-    <div
-      id="modal-abort"
-      class="fixed inset-0 bg-slate-900/70 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4"
-      role="dialog"
-      aria-modal="true"
-      aria-labelledby="abort-title"
-    >
-      <div class="bg-white rounded-3xl p-6 max-w-sm w-full shadow-2xl border border-slate-200">
-        <h3 id="abort-title" class="text-lg font-black text-slate-800 mb-2 uppercase text-center">Abortar misión</h3>
-        <p class="text-sm text-slate-500 text-center mb-6">
-          ¿Estás seguro de abortar? Se perderá el progreso del tramo actual.
-        </p>
+    <div id="modal-abort" class="fixed inset-0 bg-slate-900/70 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+      <div class="bg-white rounded-3xl p-6 max-w-sm w-full shadow-2xl">
+        <h3 class="text-lg font-black text-slate-800 mb-2 uppercase text-center">Abortar misión</h3>
+        <p class="text-sm text-slate-500 text-center mb-6">¿Estás seguro de abortar? Se perderá el progreso del tramo actual.</p>
         <div class="grid grid-cols-2 gap-3">
-          <button id="btn-abort-cancel" type="button" class="py-3 rounded-xl border border-slate-200 font-bold text-slate-500">
-            Cancelar
-          </button>
-          <button id="btn-abort-confirm" type="button" class="py-3 rounded-xl font-bold text-white bg-red-500">
-            Abortar
-          </button>
+          <button id="btn-abort-cancel" class="py-3 rounded-xl border border-slate-200 font-bold text-slate-500">Cancelar</button>
+          <button id="btn-abort-confirm" class="py-3 rounded-xl font-bold text-white bg-red-500">Abortar</button>
         </div>
       </div>
     </div>
-
-    <div
-      id="toast-container"
-      class="fixed bottom-5 right-5 z-50 flex flex-col gap-2"
-      aria-live="polite"
-    ></div>
+    <div id="toast-container" class="fixed bottom-5 right-5 z-50 flex flex-col gap-2"></div>
   </body>
 </html>
