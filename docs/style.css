@@ -156,60 +156,57 @@ body.theme-night .border-slate-300 {
   border-color: #1f2937;
 }
 
-/* Estilos para el Footer */
+/* Estilos ajustados para máxima visibilidad */
 .app-footer {
     position: fixed;
     bottom: 0;
     left: 0;
     width: 100%;
-    background: rgba(255, 255, 255, 0.1); /* Transparencia sutil */
-    backdrop-filter: blur(5px); /* Efecto vidrio empañado */
-    border-top: 1px solid rgba(255, 255, 255, 0.2);
-    padding: 10px 0;
-    color: white;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    z-index: 1000;
+    background-color: #1a1a1a; /* Fondo oscuro sólido para que resalte el texto */
+    border-top: 2px solid #0078d4;
+    padding: 15px 0;
+    color: #ffffff !important; /* Blanco puro para el texto */
+    font-family: Arial, sans-serif;
+    z-index: 9999;
 }
 
 .footer-content {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 5px;
+    justify-content: center;
+    gap: 8px;
 }
 
-.footer-content p {
+/* Aseguramos que los párrafos y spans sean visibles */
+.footer-content p, 
+.footer-content span {
     margin: 0;
-    font-size: 0.8rem;
-    opacity: 0.7;
+    color: #ffffff !important; 
+    display: block !important; /* Forzamos a que se muestren */
+    font-size: 0.85rem;
+    opacity: 1 !important; /* Quitamos la transparencia */
 }
 
 .footer-download-btn {
     background-color: #0078d4;
-    color: white;
+    color: white !important;
     text-decoration: none;
-    padding: 6px 15px;
-    border-radius: 20px;
-    font-size: 0.9rem;
-    font-weight: 600;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-weight: bold;
     display: flex;
     align-items: center;
-    gap: 8px;
-    transition: all 0.3s ease;
+    gap: 10px;
+    margin: 5px 0;
 }
 
 .footer-download-btn:hover {
     background-color: #0086f1;
-    transform: scale(1.05);
 }
 
+/* Nota de seguridad un poco más pequeña pero clara */
 .security-tip {
-    font-size: 0.65rem;
-    opacity: 0.5;
-    text-align: center;
-}
-
-/* Ajuste para que el timer no choque con el footer */
-body {
-    padding-bottom: 80px;
+    font-size: 0.7rem !important;
+    color: #cccccc !important;
 }
