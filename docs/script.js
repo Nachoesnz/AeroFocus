@@ -1,3 +1,34 @@
+const DB_COORDENADAS = {
+  "Buenos Aires": { lat: -34.6037, lng: -58.3816 },
+  "Santiago": { lat: -33.4489, lng: -70.6693 },
+  "Brasilia": { lat: -15.8267, lng: -47.9218 },
+  "Lima": { lat: -12.0464, lng: -77.0428 },
+  "Bogotá": { lat: 4.7110, lng: -74.0721 },
+  "Asunción": { lat: -25.2637, lng: -57.5759 },
+  "Montevideo": { lat: -34.9011, lng: -56.1645 },
+  "San José": { lat: 9.9281, lng: -84.0907 },
+  "Ciudad de México": { lat: 19.4326, lng: -99.1332 },
+  "Quito": { lat: -0.1807, lng: -78.4678 },
+  "Caracas": { lat: 10.4806, lng: -66.9036 },
+  "La Paz": { lat: -16.4897, lng: -68.1193 },
+  "Madrid": { lat: 40.4168, lng: -3.7038 },
+  "Londres": { lat: 51.5074, lng: -0.1278 },
+  "París": { lat: 48.8566, lng: 2.3522 },
+  "Berlín": { lat: 52.5200, lng: 13.4050 },
+  "Roma": { lat: 41.9028, lng: 12.4964 },
+  "Lisboa": { lat: 38.7223, lng: -9.1393 },
+  "Ámsterdam": { lat: 52.3676, lng: 4.9041 },
+  "Atenas": { lat: 37.9838, lng: 23.7275 },
+  "Tokio": { lat: 35.6762, lng: 139.6503 },
+  "Pekín": { lat: 39.9042, lng: 116.4074 },
+  "Washington D.C.": { lat: 38.9072, lng: -77.0369 },
+  "Ottawa": { lat: 45.4215, lng: -75.6972 },
+  "El Cairo": { lat: 30.0444, lng: 31.2357 },
+  "Doha": { lat: 25.2854, lng: 51.5310 },
+  "Bangkok": { lat: 13.7563, lng: 100.5018 },
+  "Nairobi": { lat: -1.2921, lng: 36.8219 }
+};
+
 const DB_REGIONES = {
   LATAM: [
     "Buenos Aires (ARG)",
@@ -95,7 +126,6 @@ const state = {
   isPaused: false,
   breakMinutes: DEFAULT_BREAK_MINUTES,
   distanceKm: null,
-  blocksEstimados: null,
   config: {
     focusMinutes: DEFAULT_FOCUS_MINUTES,
     breakMinutes: DEFAULT_BREAK_MINUTES,
@@ -138,7 +168,6 @@ function cacheDom() {
   dom.mapCaption = document.getElementById("map-caption");
   dom.mapStops = document.querySelectorAll(".map-stop");
   dom.distanceInfo = document.getElementById("distance-info");
-  dom.blocksInfo = document.getElementById("blocks-info");
   dom.abortModal = document.getElementById("modal-abort");
   dom.abortConfirm = document.getElementById("btn-abort-confirm");
   dom.abortCancel = document.getElementById("btn-abort-cancel");
@@ -172,6 +201,8 @@ function bindEvents() {
   dom.selectPaquete.addEventListener("change", aplicarPaquete);
   dom.abortConfirm.addEventListener("click", confirmarAbortar);
   dom.abortCancel.addEventListener("click", cerrarModalAbortar);
+  dom.selectOrigen.addEventListener("change", () => { dom.selectPaquete.value = ""; });
+  dom.selectDestino.addEventListener("change", () => { dom.selectPaquete.value = ""; });
 }
 
 function cargarPaquetes() {
@@ -346,6 +377,28 @@ function generarVuelo() {
     return;
   }
 
+  const paqueteId = dom.selectPaquete.value;
+  if (paqueteId) {
+    const paquete = PACKAGES.find((pack) => pack.id === paqueteId);
+    if (paquete) {
+      const stops = paquete.stops;
+      abortarVuelo();
+      state.itinerario = stops.map((stop, index) => {
+        if (index === 0) return { tipo: "Origen", ciudad: formatNombre(stop) };
+        if (index === stops.length - 1) return { tipo: "Destino", ciudad: formatNombre(stop) };
+        return { tipo: `Escala ${index}`, ciudad: formatNombre(stop) };
+      });
+      dom.flightNumber.textContent = `AF${Math.floor(Math.random() * 899 + 100)}`;
+      renderRuta();
+      actualizarMapa();
+      actualizarDistanciaYBloques();
+      dom.estadoVuelo.textContent = "Plan de Vuelo Listo";
+      showNotify("Ruta de paquete aprobada. Listo para despegar.");
+      actualizarControles();
+      return;
+    }
+  }
+
   abortarVuelo();
 
   state.itinerario = generarItinerario(org, dest, state.config.scales);
@@ -510,9 +563,8 @@ function actualizarReloj() {
   const total = state.enEscala
     ? state.breakMinutes * 60
     : state.config.focusMinutes * 60;
-  dom.barraProgreso.style.width = `${
-    ((total - state.tiempoRestante) / total) * 100
-  }%`;
+  dom.barraProgreso.style.width = `${((total - state.tiempoRestante) / total) * 100
+    }%`;
 }
 
 function tramoFinalizado() {
@@ -668,14 +720,6 @@ function mapearRegion(region) {
 
 function actualizarDistanciaYBloques() {
   state.distanceKm = calcularDistanciaTotal();
-  if (state.distanceKm) {
-    state.blocksEstimados = Math.max(
-      1,
-      Math.ceil(state.distanceKm / state.config.distancePerBlock),
-    );
-  } else {
-    state.blocksEstimados = null;
-  }
   actualizarDistanciaUI();
 }
 
@@ -684,10 +728,8 @@ function actualizarDistanciaUI() {
     dom.distanceInfo.textContent = `Distancia: ${Math.round(
       state.distanceKm,
     ).toLocaleString("es-AR")} km`;
-    dom.blocksInfo.textContent = `Bloques estimados: ${state.blocksEstimados}`;
   } else {
     dom.distanceInfo.textContent = "Distancia: -- km";
-    dom.blocksInfo.textContent = "Bloques estimados: --";
   }
 }
 
@@ -708,11 +750,14 @@ function calcularDistanciaTotal() {
 }
 
 function obtenerCoordenadas(ciudad) {
+  const normalized = formatNombre(ciudad);
+  if (DB_COORDENADAS[normalized]) {
+    return DB_COORDENADAS[normalized];
+  }
   const lookup = state.cityLookup[ciudad];
   if (lookup) {
     return { lat: lookup.lat, lng: lookup.lng };
   }
-  const normalized = formatNombre(ciudad);
   const normalizedLookup = state.cityLookupNormalized[normalized];
   if (normalizedLookup) {
     return { lat: normalizedLookup.lat, lng: normalizedLookup.lng };
@@ -891,8 +936,7 @@ function actualizarLogros() {
   dom.achievementsList.innerHTML = logros
     .map(
       (logro) =>
-        `<li class="${logro.done ? "text-emerald-600" : "text-slate-400"}">${
-          logro.done ? "✅" : "⬜"
+        `<li class="${logro.done ? "text-emerald-600" : "text-slate-400"}">${logro.done ? "✅" : "⬜"
         } ${logro.label}</li>`,
     )
     .join("");
