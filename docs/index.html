@@ -4,11 +4,13 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="AeroFocus es un temporizador Pomodoro gamificado con temática de vuelos." />
   <title>AeroFocus - Pomodoro de Vuelo</title>
   <link rel="icon" type="image/png" href="AeroFocusIcono.ico" />
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="style.css?v=1.2" />
+  <script defer src="config.js?v=1.2"></script>
   <script defer src="script.js"></script>
 </head>
 
@@ -145,11 +147,6 @@
           <h3 class="text-xs font-bold uppercase text-slate-500 mb-3">Mapa de Ruta</h3>
           <svg id="flight-map" class="w-full h-40" viewBox="0 0 600 160">
             <path d="M30 120 C150 10 450 10 570 120" stroke="#cbd5f5" stroke-width="4" fill="none" />
-            <circle class="map-stop" data-stop="0" cx="30" cy="120" r="9" fill="#22577a" />
-            <circle class="map-stop" data-stop="1" cx="165" cy="55" r="9" fill="#94a3b8" />
-            <circle class="map-stop" data-stop="2" cx="300" cy="35" r="9" fill="#94a3b8" />
-            <circle class="map-stop" data-stop="3" cx="435" cy="55" r="9" fill="#94a3b8" />
-            <circle class="map-stop" data-stop="4" cx="570" cy="120" r="9" fill="#94a3b8" />
           </svg>
           <div id="map-caption" class="text-xs text-slate-500 font-bold uppercase mt-2">Ruta en espera.</div>
         </div>

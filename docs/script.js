@@ -1,118 +1,4 @@
-const DB_COORDENADAS = {
-  "Buenos Aires": { lat: -34.6037, lng: -58.3816 },
-  "Santiago": { lat: -33.4489, lng: -70.6693 },
-  "Brasilia": { lat: -15.8267, lng: -47.9218 },
-  "Lima": { lat: -12.0464, lng: -77.0428 },
-  "Bogotá": { lat: 4.7110, lng: -74.0721 },
-  "Asunción": { lat: -25.2637, lng: -57.5759 },
-  "Montevideo": { lat: -34.9011, lng: -56.1645 },
-  "San José": { lat: 9.9281, lng: -84.0907 },
-  "Ciudad de México": { lat: 19.4326, lng: -99.1332 },
-  "Quito": { lat: -0.1807, lng: -78.4678 },
-  "Caracas": { lat: 10.4806, lng: -66.9036 },
-  "La Paz": { lat: -16.4897, lng: -68.1193 },
-  "Madrid": { lat: 40.4168, lng: -3.7038 },
-  "Londres": { lat: 51.5074, lng: -0.1278 },
-  "París": { lat: 48.8566, lng: 2.3522 },
-  "Berlín": { lat: 52.5200, lng: 13.4050 },
-  "Roma": { lat: 41.9028, lng: 12.4964 },
-  "Lisboa": { lat: 38.7223, lng: -9.1393 },
-  "Ámsterdam": { lat: 52.3676, lng: 4.9041 },
-  "Atenas": { lat: 37.9838, lng: 23.7275 },
-  "Tokio": { lat: 35.6762, lng: 139.6503 },
-  "Pekín": { lat: 39.9042, lng: 116.4074 },
-  "Washington D.C.": { lat: 38.9072, lng: -77.0369 },
-  "Ottawa": { lat: 45.4215, lng: -75.6972 },
-  "El Cairo": { lat: 30.0444, lng: 31.2357 },
-  "Doha": { lat: 25.2854, lng: 51.5310 },
-  "Bangkok": { lat: 13.7563, lng: 100.5018 },
-  "Nairobi": { lat: -1.2921, lng: 36.8219 }
-};
-
-const DB_REGIONES = {
-  LATAM: [
-    "Buenos Aires (ARG)",
-    "Santiago (CHL)",
-    "Brasilia (BRA)",
-    "Lima (PER)",
-    "Bogotá (COL)",
-    "Asunción (PRY)",
-    "Montevideo (URY)",
-    "San José (CRI)",
-    "Ciudad de México (MEX)",
-    "Quito (ECU)",
-    "Caracas (VEN)",
-    "La Paz (BOL)",
-  ],
-  EUROPA: [
-    "Madrid (ESP)",
-    "Londres (GBR)",
-    "París (FRA)",
-    "Berlín (GER)",
-    "Roma (ITA)",
-    "Lisboa (PRT)",
-    "Ámsterdam (NLD)",
-    "Atenas (GRC)",
-  ],
-  GLOBAL: [
-    "Tokio (JPN)",
-    "Pekín (CHN)",
-    "Washington D.C. (USA)",
-    "Ottawa (CAN)",
-    "El Cairo (EGY)",
-    "Doha (QAT)",
-    "Bangkok (THA)",
-    "Nairobi (KEN)",
-  ],
-};
-
-const DEFAULT_FOCUS_MINUTES = 45;
-const DEFAULT_BREAK_MINUTES = 10;
-const POINTS_PER_FOCUS = 500;
-const BREAK_VARIATION = 3;
-const STORAGE_KEYS = {
-  points: "puntos",
-  history: "historial",
-  flights: "vuelos",
-  config: "config",
-  theme: "theme",
-};
-
-const PACKAGES = [
-  {
-    id: "euro-trip",
-    nombre: "Gran Tour Europa",
-    stops: [
-      "Madrid (ESP)",
-      "París (FRA)",
-      "Roma (ITA)",
-      "Berlín (GER)",
-      "Londres (GBR)",
-    ],
-  },
-  {
-    id: "latam-loop",
-    nombre: "Circuito Sudamericano",
-    stops: [
-      "Buenos Aires (ARG)",
-      "Santiago (CHL)",
-      "Lima (PER)",
-      "Bogotá (COL)",
-      "Ciudad de México (MEX)",
-    ],
-  },
-  {
-    id: "world-connector",
-    nombre: "Conexión Intercontinental",
-    stops: [
-      "Madrid (ESP)",
-      "El Cairo (EGY)",
-      "Doha (QAT)",
-      "Bangkok (THA)",
-      "Tokio (JPN)",
-    ],
-  },
-];
+// Configuración separada a config.js
 
 const state = {
   tiempoRestante: DEFAULT_FOCUS_MINUTES * 60,
@@ -166,7 +52,6 @@ function cacheDom() {
   dom.achievementsList = document.getElementById("achievements-list");
   dom.pilotRank = document.getElementById("pilot-rank");
   dom.mapCaption = document.getElementById("map-caption");
-  dom.mapStops = document.querySelectorAll(".map-stop");
   dom.distanceInfo = document.getElementById("distance-info");
   dom.abortModal = document.getElementById("modal-abort");
   dom.abortConfirm = document.getElementById("btn-abort-confirm");
@@ -855,23 +740,55 @@ function seleccionarEscalasPorDistancia(origen, destino, candidatos, escalas) {
   return escalasSeleccionadas;
 }
 
+function getBezierPoint(t) {
+  const mt = 1 - t;
+  const mt2 = mt * mt;
+  const mt3 = mt2 * mt;
+  const t2 = t * t;
+  const t3 = t2 * t;
+  
+  const x = mt3 * 30 + 3 * mt2 * t * 150 + 3 * mt * t2 * 450 + t3 * 570;
+  const y = mt3 * 120 + 3 * mt2 * t * 10 + 3 * mt * t2 * 10 + t3 * 120;
+  return { x, y };
+}
+
 function actualizarMapa(reset = false) {
-  const totalStops = state.itinerario.length || 0;
-  dom.mapStops.forEach((stop, index) => {
-    if (reset || index >= totalStops) {
-      stop.setAttribute("fill", "#94a3b8");
-      stop.setAttribute("opacity", index === 0 ? "1" : "0.2");
-      return;
-    }
-    if (index < state.tramoActual) {
-      stop.setAttribute("fill", "#57cc99");
-    } else if (index === state.tramoActual) {
-      stop.setAttribute("fill", "#22577a");
+  const svg = document.getElementById("flight-map");
+  const path = svg.querySelector("path");
+  svg.innerHTML = "";
+  svg.appendChild(path);
+
+  const totalStops = state.itinerario.length;
+  const renderStops = reset || totalStops === 0 ? 5 : Math.max(2, totalStops);
+
+  for (let i = 0; i < renderStops; i++) {
+    const t = renderStops > 1 ? i / (renderStops - 1) : 0;
+    const pt = getBezierPoint(t);
+    const circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+    circle.setAttribute("cx", pt.x);
+    circle.setAttribute("cy", pt.y);
+    circle.setAttribute("r", "9");
+    circle.setAttribute("class", "map-stop");
+    
+    if (reset || totalStops === 0) {
+      circle.setAttribute("fill", "#94a3b8");
+      circle.setAttribute("opacity", i === 0 ? "1" : "0.2");
     } else {
-      stop.setAttribute("fill", "#94a3b8");
+      if (i < state.tramoActual) {
+        circle.setAttribute("fill", "#57cc99");
+      } else if (i === state.tramoActual) {
+        circle.setAttribute("fill", "#22577a");
+      } else {
+        circle.setAttribute("fill", "#94a3b8");
+      }
+      circle.setAttribute("opacity", "1");
+      
+      const title = document.createElementNS("http://www.w3.org/2000/svg", "title");
+      title.textContent = state.itinerario[i].ciudad;
+      circle.appendChild(title);
     }
-    stop.setAttribute("opacity", "1");
-  });
+    svg.appendChild(circle);
+  }
 
   if (reset || totalStops === 0) {
     dom.mapCaption.textContent = "Ruta en espera.";
