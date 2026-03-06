@@ -26,7 +26,7 @@
 
 ### Versión Web
 Puedes acceder directamente a la aplicación en vivo a través de GitHub Pages:
-👉 **[TU-LINK-DE-GITHUB-PAGES-AQUÍ]**
+👉 **(https://nachoesnz.github.io/AeroFocus/)**
 
 ### Versión de Escritorio (Windows)
 1. Ve a la sección de [Releases](https://github.com/Nachoesnz/AeroFocus/releases).
