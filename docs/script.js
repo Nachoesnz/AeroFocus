@@ -78,7 +78,7 @@ async function init() {
 }
 
 function configurarEntorno() {
-  if (window.__TAURI__) {
+  if (window.__TAURI__ || window.__TAURI_INTERNALS__) {
     const footer = document.querySelector('.app-footer');
     if (footer) footer.style.display = 'none';
     document.body.style.setProperty('padding-bottom', '24px', 'important');
