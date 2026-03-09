@@ -73,7 +73,16 @@ async function init() {
   actualizarMapa(true);
   actualizarDistanciaUI();
   aplicarTemaGuardado();
+  configurarEntorno();
   bindEvents();
+}
+
+function configurarEntorno() {
+  if (window.__TAURI__) {
+    const footer = document.querySelector('.app-footer');
+    if (footer) footer.style.display = 'none';
+    document.body.style.setProperty('padding-bottom', '24px', 'important');
+  }
 }
 
 function bindEvents() {

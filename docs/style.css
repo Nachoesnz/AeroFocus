@@ -112,3 +112,13 @@ body.theme-night .text-slate-500, body.theme-night .text-slate-400 { color: #cbd
 .footer-download-btn:hover { transform: scale(1.05); background-color: #0086f1 !important; }
 
 .security-tip { color: #aaaaaa !important; font-size: 11px !important; margin: 0 !important; }
+
+/* OCULTAR FOOTER EN MÓVILES */
+@media (max-width: 768px) {
+    .app-footer {
+        display: none !important;
+    }
+    body {
+        padding-bottom: 24px !important;
+    }
+}
